@@ -1,0 +1,76 @@
+{
+  "type" : "object",
+  "id" : "urn:jsonschema:io:gravitee:resource:cache:configuration:CacheResourceConfiguration",
+  "properties" : {
+    "cacheType" : {
+      "title": "Cache type",
+      "description": "Type of cache",
+      "enum" : [ "Redis", "Ehcache" ],
+      "type" : "string",
+      "default": "Redis"
+    },
+    "name" : {
+      "title": "Cache name",
+      "description": "The name of the cache for ehcache. For redis, this will be used as cache key prefix. For e.g. my-cache_3060b429-10dc-4cf5-a0b4-2910dc6cf520_1_1441898459_cars",
+      "type" : "string",
+      "default": "my-cache"
+    },
+    "redisHostAndPort": {
+      "title": "Redis Database Host and port",
+      "description": "Only applicable to Redis. Comma separated redis host and port in in a format: host1:6379,host2:6379. For just one server, it can be written as host:port. This is an override to whatever defined in gravitee.yml configuration file. If not provided here, you have to have values defined in ds.cache.redis.uri config in gravitee.yml. WARNING: avoid using localhost. Unless you are debugging OR you just have one gateway instance and redis also runs on that instance itself. Providing localhost and having multiple instances of gateway running, it will look for an instance of redis installed on gateway instance. And it will have very undesirable results.",
+      "type": "string",
+      "default": null
+    },
+    "redisDatabase": {
+      "title": "Redis Database",
+      "description": "Only applicable to Redis. Redis database to use. Default is 0. Note that when you are using redis cluster, database will be always 0.",
+      "enum": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "type": "integer",
+      "default": 0
+    },
+    "timeToIdleSeconds" : {
+      "title": "Time to idle (in seconds)",
+      "type" : "integer",
+      "description": "Not applicable to Redis. The maximum number of seconds an element can exist in the cache without being accessed. The element expires at this limit and will no longer be returned from the cache. The default value is 0, which means no timeToIdle (TTI) eviction takes place (infinite lifetime).",
+      "default": 0,
+      "minimum": 0
+    },
+    "timeToLiveSeconds" : {
+      "title": "Time to live (in seconds)",
+      "type" : "integer",
+      "description": "Not applicable to Redis. For redis, TTL defined in Cache policy will be effective. The maximum number of seconds an element can exist in the cache regardless of use. The element expires at this limit and will no longer be returned from the cache. The default value is 0, which means no timeToLive (TTL) eviction takes place (infinite lifetime).",
+      "default": 0,
+      "minimum": 0
+    },
+    "maxEntriesLocalHeap" : {
+      "title": "Max entries on heap",
+      "description": "Not applicable to Redis. The maximum objects to be held in local heap memory (0 = no limit).",
+      "type" : "integer",
+      "default": 1000,
+      "minimum": 0
+    }
+  },
+  "required": [
+    "name",
+    "timeToIdleSeconds",
+    "timeToLiveSeconds",
+    "maxEntriesLocalHeap"
+  ]
+}
