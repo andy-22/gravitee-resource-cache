@@ -12,7 +12,7 @@ It means that the cache is initialized when the API is starting and released whe
 
 This cache is responsible to store HTTP response from the backend to avoid subsequent calls.
 
-Current implementation of the cache resource is based on http://www.ehcache.org/[EHCache].
+This plugin supports both http://www.ehcache.org/[EHCache] and Redis
 
 == Configuration
 
@@ -21,27 +21,46 @@ You can configure the resource with the following options :
 |===
 |Property |Required |Description |Type |Default
 
-.^|name
+.^|Cache Type
 ^.^|X
-|The name of the cache.
+|Dropdown to select the Cache Type. Choices are Redis OR Ehcache
+^.^|Enumerator
+^.^|Redis
+
+
+.^|Cache Name
+^.^|X
+|The name of the cache for ehcache. For redis, this will be used as cache key prefix. For e.g. my-cache_3060b429-10dc-4cf5-a0b4-2910dc6cf520_1_1441898459_cars
 ^.^|string
 ^.^|my-cache
 
+.^|Redis Database Host and Port
+^.^|X
+|Only applicable to Redis. Comma separated redis host and port in in a format: host1:6379,host2:6379. For just one server, it can be written as host:port. This is an override to whatever defined in gravitee.yml configuration file. If not provided here, you have to have values defined in ds.cache.redis.uri config in gravitee.yml. WARNING: avoid using localhost. Unless you are debugging OR you just have one gateway instance and redis also runs on that instance itself. Providing localhost and having multiple instances of gateway running, it will look for an instance of redis installed on gateway instance. And it will have very undesirable results.
+^.^|string
+^.^|
+
+.^|Redis Database
+^.^|X
+|Only applicable to Redis. Redis database to use. Default is 0. Note that when you are using redis cluster, database will be always 0
+^.^|string
+^.^|0
+
 .^|timeToIdleSeconds
 ^.^|X
-|The maximum number of seconds an element can exist in the cache without being accessed. The element expires at this limit and will no longer be returned from the cache. The default value is 0, which means no timeToIdle (TTI) eviction takes place (infinite lifetime).
+|Not applicable to Redis. The maximum number of seconds an element can exist in the cache without being accessed. The element expires at this limit and will no longer be returned from the cache. The default value is 0, which means no timeToIdle (TTI) eviction takes place (infinite lifetime).
 ^.^|integer
 ^.^|0
 
 .^|timeToLiveSeconds
 ^.^|X
-|The maximum number of seconds an element can exist in the cache regardless of use. The element expires at this limit and will no longer be returned from the cache. The default value is 0, which means no timeToLive (TTL) eviction takes place (infinite lifetime).
+|Not applicable to Redis. For redis, TTL defined in Cache policy will be effective. The maximum number of seconds an element can exist in the cache regardless of use. The element expires at this limit and will no longer be returned from the cache. The default value is 0, which means no timeToLive (TTL) eviction takes place (infinite lifetime).
 ^.^|integer
 ^.^|0
 
 .^|maxEntriesLocalHeap
 ^.^|X
-|The maximum objects to be held in local heap memory (0 = no limit).
+|Not applicable to Redis. The maximum objects to be held in local heap memory (0 = no limit).
 ^.^|integer
 ^.^|1000
 
@@ -57,6 +76,9 @@ You can configure the resource with the following options :
     "enabled" : true,
     "configuration" : {
         "name": "my-cache",
+        "cacheType": "Redis",
+        "redisHostAndPort":"localhost:6379",
+        "redisDatabase": 0,
         "timeToIdleSeconds":0,
         "timeToLiveSeconds":0,
         "maxEntriesLocalHeap":1000
