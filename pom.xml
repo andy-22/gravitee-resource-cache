@@ -40,7 +40,7 @@
         <maven-assembly-plugin.version>2.5.5</maven-assembly-plugin.version>
         <spring-data-redis-version>2.2.3.RELEASE</spring-data-redis-version>
         <redis-clients-jedis-version>3.2.0</redis-clients-jedis-version>
-        <jackson-databind-vesion>2.10.5.1</jackson-databind-vesion>
+        <jackson-databind-vesion>2.12.6.1</jackson-databind-vesion>
         <io-gravitee-policy-cache-version>1.6.0</io-gravitee-policy-cache-version>
     </properties>
 
